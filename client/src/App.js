@@ -11,10 +11,24 @@ class App extends Component {
     this.onClick = this.onClick.bind(this);
   }
   
+  
+  postData(newItem) {
+    var data = new FormData();
+    data.append( "json", JSON.stringify( newItem ) );
+  
+    fetch("http://127.0.0.1:3001/add",
+      {
+        method: "POST",
+        body: data
+      });
+  }
+  
   onClick() {
     if (this.state.newLink && this.state.newName) {
-      this.state.items.push({link: this.state.newLink, name: this.state.newName});
+      let newItem = {link: this.state.newLink, name: this.state.newName};
+      this.state.items.push(newItem);
       this.setState(this.state);
+      this.postData(newItem);
     }
   }
   
