@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/simpleAdmin');
 const ItemSchema = new mongoose.Schema({
   project:String,
-    item:{
-      link: String,
+    link:{
+      url: String,
       name: String}
 
 });
@@ -28,9 +28,9 @@ app.post('/add', (req, res, next) => {
   // console.log("req.body: " + req.body["link"] + JSON.stringify(req.body, null, 4) + "\n");
   Item.create({
     project: req.body.project,
-    item:
+    link:
         {   name: req.body.name,
-            link: req.body.link
+            url: req.body.url
         }
   })
     .then(_ => res.json({ok: true}));

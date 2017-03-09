@@ -26,15 +26,17 @@ class App extends Component {
         .then(res => {
             return res.json()})
         .then(results =>{
-            results.map(item => {this.state.items.push(item)});
+            results.map(item => {
+                this.state.items.push(item)
+                console.log(item)
+            });
             this.setState(this.state);
-        })
-        .bind(this);
+        }).bind(this);
 }
   
   onClick() {
-    if (this.state.newProject && this.state.newLink && this.state.newName) {
-      let newItem = {project: this.state.newProject, link: this.state.newLink, name: this.state.newName};
+    if (this.state.newProject && this.state.newUrl && this.state.newName) {
+      let newItem = {project: this.state.newProject, url: this.state.newUrl, name: this.state.newName};
       console.log(newItem)
       this.state.items.push(newItem);
       this.setState(this.state);
@@ -42,27 +44,40 @@ class App extends Component {
     }
   }
 
+   itemAdd({newProject, newName, newUrl}) {
+          return (
+              <div class="item_add">
+                  <label htmlFor="project">项目</label>
+                  <input type="text" id="project"  placeholder="please input project" onChange={event => this.setState({newProject: event.target.value})}
+                         value={newProject}/>
+                  <label htmlFor="name">名字</label>
+                  <input type="text" id="name"  placeholder="please input name" onChange={event => this.setState({newName: event.target.value})}
+                         value={newName}/>
+                  <label htmlFor="url">链接</label>
+                  <input type="text" id="url" placeholder="please input url" onChange={event => this.setState({newUrl: event.target.value})}
+                         value={newUrl}/>
+                  <button onClick={this.onClick}>add</button>
+              </div>
+          );
+   }
+
+    itemList({items}) {
+        return (
+            <div id="item_list">
+                <h3 style={{color: 'blue'}}>UCM:</h3>
+                {items.map((item, index) => (
+                    <div key={index}><a href={item.link.url}>{item.project + " " + item.link.name}</a></div>))}
+            </div>
+        );
+    }
+
   render() {
-    const {newProject, newName, newLink, items} = this.state;
+    // const {newProject, newName, newUrl, items} = this.state;
     return (
       <div >
         <div>
-          <div>
-            <label htmlFor="project">项目</label>
-            <input type="text" id="project"  placeholder="please input project" onChange={event => this.setState({newProject: event.target.value})}
-                   value={newProject}/>
-            <label htmlFor="name">名字</label>
-            <input type="text" id="name"  placeholder="please input name" onChange={event => this.setState({newName: event.target.value})}
-                   value={newName}/>
-            <label htmlFor="link">链接</label>
-            <input type="text" id="link" placeholder="please input link" onChange={event => this.setState({newLink: event.target.value})}
-                   value={newLink}/>
-            <button onClick={this.onClick}>add</button>
-          </div>
-          <div id="list_item">
-            {/*<h3 style={{color: 'blue'}}>{this.state.project}</h3>*/}
-            {items.map((item, index) => (<div key={index}><a href={item.item.link}>{item.project + " " + item.item.name}</a></div>))}
-          </div>
+            {this.itemAdd(this.state)}
+            {this.itemList(this.state)}
         </div>
       </div>
     );
