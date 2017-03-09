@@ -3,8 +3,6 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  
-  
   constructor(props) {
     super(props);
     this.state = {items: []};
@@ -24,17 +22,26 @@ class App extends Component {
   }
 
   //TODO
-  getData(){
-      fetch("http://127.0.0.1:3001/get")
-          .then(res => {
-              return res.json()})
-          .then(json =>{
-              this.state.items.push(json);
-              this.setState(this.state);
-          })
-  }
+  // getData(){
+  //     fetch("http://127.0.0.1:3001/get")
+  //         .then(res => {
+  //             return res.json()})
+  //         .then(json =>{
+  //             this.state.items.push(json);
+  //             this.setState(this.state);
+  //         })
+  // }
 
-
+    componentDidMount() {
+    fetch("http://127.0.0.1:3001/get")
+        .then(res => {
+            return res.json()})
+        .then(json =>{
+            this.state.items.push(json);
+            this.setState(this.state);
+        })
+        .bind(this);
+}
   
   onClick() {
     if (this.state.newLink && this.state.newName) {
@@ -42,8 +49,6 @@ class App extends Component {
       this.state.items.push(newItem);
       this.setState(this.state);
       this.postData(newItem);
-      this.getData();
-
     }
   }
 
