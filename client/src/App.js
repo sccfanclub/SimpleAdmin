@@ -75,10 +75,8 @@ class App extends Component {
     // const {newProject, newName, newUrl, items} = this.state;
     return (
       <div >
-        <div>
             {this.itemAdd(this.state)}
             {this.itemList(this.state)}
-        </div>
       </div>
     );
   }
