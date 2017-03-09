@@ -8,8 +8,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/simpleAdmin');
 const ItemSchema = new mongoose.Schema({
-  link: String,
-  name: String
+  project:String,
+    item:{
+      link: String,
+      name: String}
+
 });
 
 const Item = mongoose.model('item', ItemSchema);
@@ -23,13 +26,19 @@ app.use(bodyParser.json({}));
 
 app.post('/add', (req, res, next) => {
   // console.log("req.body: " + req.body["link"] + JSON.stringify(req.body, null, 4) + "\n");
-  Item.create({name: req.body.name, link: req.body.link})
+  Item.create({
+    project: req.body.project,
+    item:
+        {   name: req.body.name,
+            link: req.body.link
+        }
+  })
     .then(_ => res.json({ok: true}));
 });
 
 app.get('/get', (req, res, next) => {
     // console.log("req.body: " + req.body["link"] + JSON.stringify(req.body, null, 4) + "\n");
-    Item.findOne({name: 'baidu'}, (err, item) =>{
+    Item.find({}, (err, item) =>{
       if (err) {
         alert(err)
       }

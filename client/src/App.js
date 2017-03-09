@@ -21,31 +21,21 @@ class App extends Component {
       });
   }
 
-  //TODO
-  // getData(){
-  //     fetch("http://127.0.0.1:3001/get")
-  //         .then(res => {
-  //             return res.json()})
-  //         .then(json =>{
-  //             this.state.items.push(json);
-  //             this.setState(this.state);
-  //         })
-  // }
-
     componentDidMount() {
     fetch("http://127.0.0.1:3001/get")
         .then(res => {
             return res.json()})
-        .then(json =>{
-            this.state.items.push(json);
+        .then(results =>{
+            results.map(item => {this.state.items.push(item)});
             this.setState(this.state);
         })
         .bind(this);
 }
   
   onClick() {
-    if (this.state.newLink && this.state.newName) {
-      let newItem = {link: this.state.newLink, name: this.state.newName};
+    if (this.state.newProject && this.state.newLink && this.state.newName) {
+      let newItem = {project: this.state.newProject, link: this.state.newLink, name: this.state.newName};
+      console.log(newItem)
       this.state.items.push(newItem);
       this.setState(this.state);
       this.postData(newItem);
@@ -53,11 +43,14 @@ class App extends Component {
   }
 
   render() {
-    const {newName, newLink, items} = this.state;
+    const {newProject, newName, newLink, items} = this.state;
     return (
-      <div>
+      <div >
         <div>
           <div>
+            <label htmlFor="project">项目</label>
+            <input type="text" id="project"  placeholder="please input project" onChange={event => this.setState({newProject: event.target.value})}
+                   value={newProject}/>
             <label htmlFor="name">名字</label>
             <input type="text" id="name"  placeholder="please input name" onChange={event => this.setState({newName: event.target.value})}
                    value={newName}/>
@@ -66,13 +59,9 @@ class App extends Component {
                    value={newLink}/>
             <button onClick={this.onClick}>add</button>
           </div>
-          
-          <br/>
-          <br/>
-          
           <div id="list_item">
-
-            {items.map((item, index) => (<div key={index}><a href={item.link}>{item.name}</a></div>))}
+            {/*<h3 style={{color: 'blue'}}>{this.state.project}</h3>*/}
+            {items.map((item, index) => (<div key={index}><a href={item.item.link}>{item.project + " " + item.item.name}</a></div>))}
           </div>
         </div>
       </div>
