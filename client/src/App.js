@@ -13,15 +13,28 @@ class App extends Component {
   
   
   postData(newItem) {
-    var data = new FormData();
-    data.append( "json", JSON.stringify( newItem ) );
-  
     fetch("http://127.0.0.1:3001/add",
       {
         method: "POST",
-        body: data
+          headers: {
+              'Content-Type': 'application/json'
+          },
+        body:  JSON.stringify( newItem )
       });
   }
+
+  //TODO
+  getData(){
+      fetch("http://127.0.0.1:3001/get")
+          .then(res => {
+              return res.json()})
+          .then(json =>{
+              this.state.items.push(json);
+              this.setState(this.state);
+          })
+  }
+
+
   
   onClick() {
     if (this.state.newLink && this.state.newName) {
@@ -29,9 +42,11 @@ class App extends Component {
       this.state.items.push(newItem);
       this.setState(this.state);
       this.postData(newItem);
+      this.getData();
+
     }
   }
-  
+
   render() {
     const {newName, newLink, items} = this.state;
     return (
@@ -50,7 +65,8 @@ class App extends Component {
           <br/>
           <br/>
           
-          <div>
+          <div id="list_item">
+
             {items.map((item, index) => (<div key={index}><a href={item.link}>{item.name}</a></div>))}
           </div>
         </div>

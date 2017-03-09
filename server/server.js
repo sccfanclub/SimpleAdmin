@@ -12,16 +12,29 @@ const ItemSchema = new mongoose.Schema({
   name: String
 });
 
-const item = mongoose.model('item', ItemSchema);
+const Item = mongoose.model('item', ItemSchema);
+// var item_1 = new item({link: 'http://www.baidu.com', name: 'baidu'});
+// console.log(item_1.name);
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 app.use(cors());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.json({}));
+
 app.post('/add', (req, res, next) => {
-  console.log("req.bdoy: " + JSON.stringify(req.body, null, 4) + "\n");
-  // item.create({name: req.body.name, link: req.body.link})
-  //   .then(_ => res.json({ok: true}));
+  // console.log("req.body: " + req.body["link"] + JSON.stringify(req.body, null, 4) + "\n");
+  Item.create({name: req.body.name, link: req.body.link})
+    .then(_ => res.json({ok: true}));
 });
+
+app.get('/get', (req, res, next) => {
+    // console.log("req.body: " + req.body["link"] + JSON.stringify(req.body, null, 4) + "\n");
+    Item.findOne({name: 'baidu'}, (err, item) =>{
+      if (err) {
+        alert(err)
+      }
+      res.status(200).json(item)})
+});
+
 
 app.listen(3001);
